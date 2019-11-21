@@ -2,9 +2,10 @@
   "name": "timelight-ai-js-api-client",
   "version": "1.0.0",
   "description": "Timelight API universal JS client. Compatible with ES5 browsers, TypeScript and Node JS.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "ci": "echo 'ok'",
+    "ci": "tsc",
     "test": "echo 'ok'"
   },
   "repository": {
@@ -19,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/timelight-ai/js-api-client/issues"
   },
-  "homepage": "https://github.com/timelight-ai/js-api-client#readme"
+  "homepage": "https://github.com/timelight-ai/js-api-client#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  }
 }
