@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on: 
+  push:
+    tags-ignore:
+      - v1.*           # Push events to tags v1.0, v1.1, and v1.9
 
 jobs:
   build:
