@@ -6,9 +6,12 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "ci": "tsc",
-    "gen:reference": "tsc && jsdoc2md dist/api.js > REFERENCE.md",
+    "gen:reference": "tsc && jsdoc2md dist/api.js > REFERENCE.md; git add REFERENCE.md",
     "test": "echo 'ok'"
   },
+  "pre-commit": [
+    "gen:reference"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timelight-ai/js-api-client.git"
@@ -25,6 +28,7 @@
   "dependencies": {},
   "devDependencies": {
     "jsdoc-to-markdown": "^5.0.3",
+    "pre-commit": "^1.2.2",
     "typescript": "^3.7.2"
   }
 }
