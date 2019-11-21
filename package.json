@@ -13,6 +13,7 @@
   "pre-commit": [
     "gen:reference"
   ],
+  "files": ["./dist"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timelight-ai/js-api-client.git"
