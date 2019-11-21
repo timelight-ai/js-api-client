@@ -14,7 +14,8 @@
     "gen:reference"
   ],
   "files": [
-    "./dist"
+    "dist/**/*.js",
+    "dist/**/*.ts"
   ],
   "repository": {
     "type": "git",
