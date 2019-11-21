@@ -30,7 +30,9 @@
     "url": "https://github.com/timelight-ai/js-api-client/issues"
   },
   "homepage": "https://github.com/timelight-ai/js-api-client#readme",
-  "dependencies": {},
+  "dependencies": {
+    "portable-fetch": "^3.0.0"
+  },
   "devDependencies": {
     "jsdoc-to-markdown": "^5.0.3",
     "pre-commit": "^1.2.2",
