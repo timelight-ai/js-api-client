@@ -445,7 +445,7 @@ export interface CreateSourceDayDto {
      */
     date: string;
     /**
-     * An array of 144 values. Each value represents a time window of 10 minutes
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
      * @type {Array<number>}
      * @memberof CreateSourceDayDto
      */
@@ -947,7 +947,7 @@ export interface ImportDayDto {
      */
     date: string;
     /**
-     * An array of 144 values. Each value represents a time window of 10 minutes
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
      * @type {Array<number>}
      * @memberof ImportDayDto
      */
@@ -1118,6 +1118,49 @@ export interface ModelPatchDto {
 /**
  *
  * @export
+ * @interface ModelPostDto
+ */
+export interface ModelPostDto {
+    /**
+     * The color in hex format. Ex: '#FFFFFF'
+     * @type {string}
+     * @memberof ModelPostDto
+     */
+    color: string;
+    /**
+     * The model name, between 1 and 100 characters
+     * @type {string}
+     * @memberof ModelPostDto
+     */
+    name: string;
+    /**
+     * True if the model is an anomaly and should be ignored by the ML engine
+     * @type {boolean}
+     * @memberof ModelPostDto
+     */
+    anomaly: boolean;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    topTolerance: Array<number>;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    activity: Array<number>;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    bottomTolerance: Array<number>;
+}
+/**
+ *
+ * @export
  * @interface ModelsPatchDto
  */
 export interface ModelsPatchDto {
@@ -1127,6 +1170,19 @@ export interface ModelsPatchDto {
      * @memberof ModelsPatchDto
      */
     models: Array<ModelPatchDto>;
+}
+/**
+ *
+ * @export
+ * @interface ModelsPostDto
+ */
+export interface ModelsPostDto {
+    /**
+     * The list of models to be created
+     * @type {Array<ModelPostDto>}
+     * @memberof ModelsPostDto
+     */
+    models: Array<ModelPostDto>;
 }
 /**
  *
@@ -1411,25 +1467,25 @@ export interface SourceDto {
      * @type {number}
      * @memberof SourceDto
      */
-    groupId: number;
+    groupId?: number;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    groupInertia: number;
+    groupInertia?: number;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    projectionX: number;
+    projectionX?: number;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    projectionY: number;
+    projectionY?: number;
     /**
      *
      * @type {number}
@@ -1447,37 +1503,43 @@ export interface SourceDto {
      * @type {boolean}
      * @memberof SourceDto
      */
+    hasCustomModels: boolean;
+    /**
+     *
+     * @type {boolean}
+     * @memberof SourceDto
+     */
     previsionEnabled: boolean;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    latitude: number;
+    latitude?: number;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    longitude: number;
+    longitude?: number;
     /**
      *
      * @type {string}
      * @memberof SourceDto
      */
-    address: string;
+    address?: string;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    alertMinCriticity: number;
+    alertMinCriticity?: number;
     /**
      *
      * @type {number}
      * @memberof SourceDto
      */
-    alertMaxCriticity: number;
+    alertMaxCriticity?: number;
 }
 /**
  *
@@ -1664,7 +1726,7 @@ export declare const AIApiFetchParamCreator: (configuration?: Configuration) => 
     v1AiAnomaliesSourceIdGet(sourceId: number, options?: any): FetchArgs;
     /**
      * Erases and re-computes all day models for a source and year
-     * @summary Recomputes all day modesl
+     * @summary Recomputes all day models
      * @param {number} year
      * @param {number} sourceId
      * @param {*} [options] Override http request option.
@@ -1714,7 +1776,7 @@ export declare const AIApiFp: (configuration?: Configuration) => {
     v1AiAnomaliesSourceIdGet(sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AnomaliesResponseDto>;
     /**
      * Erases and re-computes all day models for a source and year
-     * @summary Recomputes all day modesl
+     * @summary Recomputes all day models
      * @param {number} year
      * @param {number} sourceId
      * @param {*} [options] Override http request option.
@@ -1764,7 +1826,7 @@ export declare const AIApiFactory: (configuration?: Configuration, fetch?: Fetch
     v1AiAnomaliesSourceIdGet(sourceId: number, options?: any): Promise<AnomaliesResponseDto>;
     /**
      * Erases and re-computes all day models for a source and year
-     * @summary Recomputes all day modesl
+     * @summary Recomputes all day models
      * @param {number} year
      * @param {number} sourceId
      * @param {*} [options] Override http request option.
@@ -1817,7 +1879,7 @@ export declare class AIApi extends BaseAPI {
     v1AiAnomaliesSourceIdGet(sourceId: number, options?: any): Promise<AnomaliesResponseDto>;
     /**
      * Erases and re-computes all day models for a source and year
-     * @summary Recomputes all day modesl
+     * @summary Recomputes all day models
      * @param {number} year
      * @param {number} sourceId
      * @param {*} [options] Override http request option.
@@ -2994,6 +3056,22 @@ export declare const ModelApiFetchParamCreator: (configuration?: Configuration) 
      */
     v1ModelBulkPatch(ModelsPatchDto: ModelsPatchDto, options?: any): FetchArgs;
     /**
+     * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+     * @summary Custom Model create
+     * @param {ModelsPostDto} ModelsPostDto
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any): FetchArgs;
+    /**
+     *
+     * @summary List models data of this source
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelListGet(options?: any): FetchArgs;
+    /**
      *
      * @summary List models data of this source
      * @param {number} sourceId
@@ -3001,6 +3079,15 @@ export declare const ModelApiFetchParamCreator: (configuration?: Configuration) 
      * @throws {RequiredError}
      */
     v1ModelListSourceIdGet(sourceId: number, options?: any): FetchArgs;
+    /**
+     * Drop all models and re-create them from data
+     * @summary Reset to default timelight models configuration
+     * @param {number} modelCount
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any): FetchArgs;
 };
 /**
  * ModelApi - functional programming interface
@@ -3016,6 +3103,22 @@ export declare const ModelApiFp: (configuration?: Configuration) => {
      */
     v1ModelBulkPatch(ModelsPatchDto: ModelsPatchDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto>;
     /**
+     * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+     * @summary Custom Model create
+     * @param {ModelsPostDto} ModelsPostDto
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto>;
+    /**
+     *
+     * @summary List models data of this source
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelListGet(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto>;
+    /**
      *
      * @summary List models data of this source
      * @param {number} sourceId
@@ -3023,6 +3126,15 @@ export declare const ModelApiFp: (configuration?: Configuration) => {
      * @throws {RequiredError}
      */
     v1ModelListSourceIdGet(sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto>;
+    /**
+     * Drop all models and re-create them from data
+     * @summary Reset to default timelight models configuration
+     * @param {number} modelCount
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto>;
 };
 /**
  * ModelApi - factory interface
@@ -3038,6 +3150,22 @@ export declare const ModelApiFactory: (configuration?: Configuration, fetch?: Fe
      */
     v1ModelBulkPatch(ModelsPatchDto: ModelsPatchDto, options?: any): Promise<ModelListDto>;
     /**
+     * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+     * @summary Custom Model create
+     * @param {ModelsPostDto} ModelsPostDto
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any): Promise<ModelListDto>;
+    /**
+     *
+     * @summary List models data of this source
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelListGet(options?: any): Promise<ModelListDto>;
+    /**
      *
      * @summary List models data of this source
      * @param {number} sourceId
@@ -3045,6 +3173,15 @@ export declare const ModelApiFactory: (configuration?: Configuration, fetch?: Fe
      * @throws {RequiredError}
      */
     v1ModelListSourceIdGet(sourceId: number, options?: any): Promise<ModelListDto>;
+    /**
+     * Drop all models and re-create them from data
+     * @summary Reset to default timelight models configuration
+     * @param {number} modelCount
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any): Promise<ModelListDto>;
 };
 /**
  * ModelApi - object-oriented interface
@@ -3063,6 +3200,24 @@ export declare class ModelApi extends BaseAPI {
      */
     v1ModelBulkPatch(ModelsPatchDto: ModelsPatchDto, options?: any): Promise<ModelListDto>;
     /**
+     * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+     * @summary Custom Model create
+     * @param {ModelsPostDto} ModelsPostDto
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any): Promise<ModelListDto>;
+    /**
+     *
+     * @summary List models data of this source
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    v1ModelListGet(options?: any): Promise<ModelListDto>;
+    /**
      *
      * @summary List models data of this source
      * @param {number} sourceId
@@ -3071,6 +3226,100 @@ export declare class ModelApi extends BaseAPI {
      * @memberof ModelApi
      */
     v1ModelListSourceIdGet(sourceId: number, options?: any): Promise<ModelListDto>;
+    /**
+     * Drop all models and re-create them from data
+     * @summary Reset to default timelight models configuration
+     * @param {number} modelCount
+     * @param {number} sourceId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any): Promise<ModelListDto>;
+}
+/**
+ * OnboardingApi - fetch parameter creator
+ * @export
+ */
+export declare const OnboardingApiFetchParamCreator: (configuration?: Configuration) => {
+    /**
+     *
+     * @summary Analyze a csv input
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingAnalyzeCsvPost(options?: any): FetchArgs;
+    /**
+     *
+     * @summary Checks that our onboarding csv file is valid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingValidateCsvPost(options?: any): FetchArgs;
+};
+/**
+ * OnboardingApi - functional programming interface
+ * @export
+ */
+export declare const OnboardingApiFp: (configuration?: Configuration) => {
+    /**
+     *
+     * @summary Analyze a csv input
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingAnalyzeCsvPost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
+    /**
+     *
+     * @summary Checks that our onboarding csv file is valid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingValidateCsvPost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response>;
+};
+/**
+ * OnboardingApi - factory interface
+ * @export
+ */
+export declare const OnboardingApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
+    /**
+     *
+     * @summary Analyze a csv input
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingAnalyzeCsvPost(options?: any): Promise<Response>;
+    /**
+     *
+     * @summary Checks that our onboarding csv file is valid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    v1OnboardingValidateCsvPost(options?: any): Promise<Response>;
+};
+/**
+ * OnboardingApi - object-oriented interface
+ * @export
+ * @class OnboardingApi
+ * @extends {BaseAPI}
+ */
+export declare class OnboardingApi extends BaseAPI {
+    /**
+     *
+     * @summary Analyze a csv input
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OnboardingApi
+     */
+    v1OnboardingAnalyzeCsvPost(options?: any): Promise<Response>;
+    /**
+     *
+     * @summary Checks that our onboarding csv file is valid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OnboardingApi
+     */
+    v1OnboardingValidateCsvPost(options?: any): Promise<Response>;
 }
 /**
  * PrevisionApi - fetch parameter creator
