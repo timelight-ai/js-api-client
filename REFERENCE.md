@@ -19,6 +19,8 @@
 <dd></dd>
 <dt><a href="#ModelApi">ModelApi</a> ⇐ <code><a href="#BaseAPI">BaseAPI</a></code></dt>
 <dd></dd>
+<dt><a href="#OnboardingApi">OnboardingApi</a> ⇐ <code><a href="#BaseAPI">BaseAPI</a></code></dt>
+<dd></dd>
 <dt><a href="#PrevisionApi">PrevisionApi</a> ⇐ <code><a href="#BaseAPI">BaseAPI</a></code></dt>
 <dd></dd>
 <dt><a href="#SourceApi">SourceApi</a> ⇐ <code><a href="#BaseAPI">BaseAPI</a></code></dt>
@@ -329,23 +331,68 @@
 <dt><a href="#v1ModelBulkPatch">v1ModelBulkPatch(ModelsPatchDto, [options])</a></dt>
 <dd><p>Update many models at once, mainly used to set color and name of the model</p>
 </dd>
+<dt><a href="#v1ModelBulkReplaceSourceIdPost">v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])</a></dt>
+<dd><p>Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.</p>
+</dd>
+<dt><a href="#v1ModelListGet">v1ModelListGet([options])</a></dt>
+<dd></dd>
 <dt><a href="#v1ModelListSourceIdGet">v1ModelListSourceIdGet(sourceId, [options])</a></dt>
 <dd></dd>
+<dt><a href="#v1ModelResetSourceIdModelCountPost">v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])</a></dt>
+<dd><p>Drop all models and re-create them from data</p>
+</dd>
 <dt><a href="#ModelApiFp">ModelApiFp()</a></dt>
 <dd><p>ModelApi - functional programming interface</p>
 </dd>
 <dt><a href="#v1ModelBulkPatch">v1ModelBulkPatch(ModelsPatchDto, [options])</a></dt>
 <dd><p>Update many models at once, mainly used to set color and name of the model</p>
 </dd>
+<dt><a href="#v1ModelBulkReplaceSourceIdPost">v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])</a></dt>
+<dd><p>Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.</p>
+</dd>
+<dt><a href="#v1ModelListGet">v1ModelListGet([options])</a></dt>
+<dd></dd>
 <dt><a href="#v1ModelListSourceIdGet">v1ModelListSourceIdGet(sourceId, [options])</a></dt>
 <dd></dd>
+<dt><a href="#v1ModelResetSourceIdModelCountPost">v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])</a></dt>
+<dd><p>Drop all models and re-create them from data</p>
+</dd>
 <dt><a href="#ModelApiFactory">ModelApiFactory()</a></dt>
 <dd><p>ModelApi - factory interface</p>
 </dd>
 <dt><a href="#v1ModelBulkPatch">v1ModelBulkPatch(ModelsPatchDto, [options])</a></dt>
 <dd><p>Update many models at once, mainly used to set color and name of the model</p>
 </dd>
+<dt><a href="#v1ModelBulkReplaceSourceIdPost">v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])</a></dt>
+<dd><p>Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.</p>
+</dd>
+<dt><a href="#v1ModelListGet">v1ModelListGet([options])</a></dt>
+<dd></dd>
 <dt><a href="#v1ModelListSourceIdGet">v1ModelListSourceIdGet(sourceId, [options])</a></dt>
+<dd></dd>
+<dt><a href="#v1ModelResetSourceIdModelCountPost">v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])</a></dt>
+<dd><p>Drop all models and re-create them from data</p>
+</dd>
+<dt><a href="#OnboardingApiFetchParamCreator">OnboardingApiFetchParamCreator()</a></dt>
+<dd><p>OnboardingApi - fetch parameter creator</p>
+</dd>
+<dt><a href="#v1OnboardingAnalyzeCsvPost">v1OnboardingAnalyzeCsvPost([options])</a></dt>
+<dd></dd>
+<dt><a href="#v1OnboardingValidateCsvPost">v1OnboardingValidateCsvPost([options])</a></dt>
+<dd></dd>
+<dt><a href="#OnboardingApiFp">OnboardingApiFp()</a></dt>
+<dd><p>OnboardingApi - functional programming interface</p>
+</dd>
+<dt><a href="#v1OnboardingAnalyzeCsvPost">v1OnboardingAnalyzeCsvPost([options])</a></dt>
+<dd></dd>
+<dt><a href="#v1OnboardingValidateCsvPost">v1OnboardingValidateCsvPost([options])</a></dt>
+<dd></dd>
+<dt><a href="#OnboardingApiFactory">OnboardingApiFactory()</a></dt>
+<dd><p>OnboardingApi - factory interface</p>
+</dd>
+<dt><a href="#v1OnboardingAnalyzeCsvPost">v1OnboardingAnalyzeCsvPost([options])</a></dt>
+<dd></dd>
+<dt><a href="#v1OnboardingValidateCsvPost">v1OnboardingValidateCsvPost([options])</a></dt>
 <dd></dd>
 <dt><a href="#PrevisionApiFetchParamCreator">PrevisionApiFetchParamCreator()</a></dt>
 <dd><p>PrevisionApi - fetch parameter creator</p>
@@ -557,7 +604,7 @@ AIApi - object-oriented interface
 Erases and re-computes all day models for a source and year
 
 **Kind**: instance method of [<code>AIApi</code>](#AIApi)  
-**Summary**: Recomputes all day modesl  
+**Summary**: Recomputes all day models  
 **Throws**:
 
 - [<code>RequiredError</code>](#RequiredError) 
@@ -1162,7 +1209,10 @@ When new data is added, we compute alerts for this data
 * [ModelApi](#ModelApi) ⇐ [<code>BaseAPI</code>](#BaseAPI)
     * [new ModelApi()](#new_ModelApi_new)
     * [.v1ModelBulkPatch(ModelsPatchDto, [options])](#ModelApi+v1ModelBulkPatch)
+    * [.v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])](#ModelApi+v1ModelBulkReplaceSourceIdPost)
+    * [.v1ModelListGet([options])](#ModelApi+v1ModelListGet)
     * [.v1ModelListSourceIdGet(sourceId, [options])](#ModelApi+v1ModelListSourceIdGet)
+    * [.v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])](#ModelApi+v1ModelResetSourceIdModelCountPost)
 
 <a name="new_ModelApi_new"></a>
 
@@ -1186,6 +1236,38 @@ Update many models at once, mainly used to set color and name of the model
 | ModelsPatchDto | <code>ModelsPatchDto</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
+<a name="ModelApi+v1ModelBulkReplaceSourceIdPost"></a>
+
+### modelApi.v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])
+Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+
+**Kind**: instance method of [<code>ModelApi</code>](#ModelApi)  
+**Summary**: Custom Model create  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ModelsPostDto | <code>ModelsPostDto</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="ModelApi+v1ModelListGet"></a>
+
+### modelApi.v1ModelListGet([options])
+**Kind**: instance method of [<code>ModelApi</code>](#ModelApi)  
+**Summary**: List models data of this source  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
 <a name="ModelApi+v1ModelListSourceIdGet"></a>
 
 ### modelApi.v1ModelListSourceIdGet(sourceId, [options])
@@ -1199,6 +1281,68 @@ Update many models at once, mainly used to set color and name of the model
 | Param | Type | Description |
 | --- | --- | --- |
 | sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="ModelApi+v1ModelResetSourceIdModelCountPost"></a>
+
+### modelApi.v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])
+Drop all models and re-create them from data
+
+**Kind**: instance method of [<code>ModelApi</code>](#ModelApi)  
+**Summary**: Reset to default timelight models configuration  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modelCount | <code>number</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="OnboardingApi"></a>
+
+## OnboardingApi ⇐ [<code>BaseAPI</code>](#BaseAPI)
+**Kind**: global class  
+**Extends**: [<code>BaseAPI</code>](#BaseAPI)  
+
+* [OnboardingApi](#OnboardingApi) ⇐ [<code>BaseAPI</code>](#BaseAPI)
+    * [new OnboardingApi()](#new_OnboardingApi_new)
+    * [.v1OnboardingAnalyzeCsvPost([options])](#OnboardingApi+v1OnboardingAnalyzeCsvPost)
+    * [.v1OnboardingValidateCsvPost([options])](#OnboardingApi+v1OnboardingValidateCsvPost)
+
+<a name="new_OnboardingApi_new"></a>
+
+### new OnboardingApi()
+OnboardingApi - object-oriented interface
+
+<a name="OnboardingApi+v1OnboardingAnalyzeCsvPost"></a>
+
+### onboardingApi.v1OnboardingAnalyzeCsvPost([options])
+**Kind**: instance method of [<code>OnboardingApi</code>](#OnboardingApi)  
+**Summary**: Analyze a csv input  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="OnboardingApi+v1OnboardingValidateCsvPost"></a>
+
+### onboardingApi.v1OnboardingValidateCsvPost([options])
+**Kind**: instance method of [<code>OnboardingApi</code>](#OnboardingApi)  
+**Summary**: Checks that our onboarding csv file is valid  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
 | [options] | <code>\*</code> | Override http request option. |
 
 <a name="PrevisionApi"></a>
@@ -1614,7 +1758,7 @@ AIApi - fetch parameter creator
 Erases and re-computes all day models for a source and year
 
 **Kind**: global function  
-**Summary**: Recomputes all day modesl  
+**Summary**: Recomputes all day models  
 **Throws**:
 
 - [<code>RequiredError</code>](#RequiredError) 
@@ -1707,7 +1851,7 @@ AIApi - functional programming interface
 Erases and re-computes all day models for a source and year
 
 **Kind**: global function  
-**Summary**: Recomputes all day modesl  
+**Summary**: Recomputes all day models  
 **Throws**:
 
 - [<code>RequiredError</code>](#RequiredError) 
@@ -1800,7 +1944,7 @@ AIApi - factory interface
 Erases and re-computes all day models for a source and year
 
 **Kind**: global function  
-**Summary**: Recomputes all day modesl  
+**Summary**: Recomputes all day models  
 **Throws**:
 
 - [<code>RequiredError</code>](#RequiredError) 
@@ -3281,6 +3425,38 @@ Update many models at once, mainly used to set color and name of the model
 | ModelsPatchDto | <code>ModelsPatchDto</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
+<a name="v1ModelBulkReplaceSourceIdPost"></a>
+
+## v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])
+Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+
+**Kind**: global function  
+**Summary**: Custom Model create  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ModelsPostDto | <code>ModelsPostDto</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelListGet"></a>
+
+## v1ModelListGet([options])
+**Kind**: global function  
+**Summary**: List models data of this source  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
 <a name="v1ModelListSourceIdGet"></a>
 
 ## v1ModelListSourceIdGet(sourceId, [options])
@@ -3293,6 +3469,24 @@ Update many models at once, mainly used to set color and name of the model
 
 | Param | Type | Description |
 | --- | --- | --- |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelResetSourceIdModelCountPost"></a>
+
+## v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])
+Drop all models and re-create them from data
+
+**Kind**: global function  
+**Summary**: Reset to default timelight models configuration  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modelCount | <code>number</code> |  |
 | sourceId | <code>number</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
@@ -3319,6 +3513,38 @@ Update many models at once, mainly used to set color and name of the model
 | ModelsPatchDto | <code>ModelsPatchDto</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
+<a name="v1ModelBulkReplaceSourceIdPost"></a>
+
+## v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])
+Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+
+**Kind**: global function  
+**Summary**: Custom Model create  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ModelsPostDto | <code>ModelsPostDto</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelListGet"></a>
+
+## v1ModelListGet([options])
+**Kind**: global function  
+**Summary**: List models data of this source  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
 <a name="v1ModelListSourceIdGet"></a>
 
 ## v1ModelListSourceIdGet(sourceId, [options])
@@ -3331,6 +3557,24 @@ Update many models at once, mainly used to set color and name of the model
 
 | Param | Type | Description |
 | --- | --- | --- |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelResetSourceIdModelCountPost"></a>
+
+## v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])
+Drop all models and re-create them from data
+
+**Kind**: global function  
+**Summary**: Reset to default timelight models configuration  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modelCount | <code>number</code> |  |
 | sourceId | <code>number</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
@@ -3357,6 +3601,38 @@ Update many models at once, mainly used to set color and name of the model
 | ModelsPatchDto | <code>ModelsPatchDto</code> |  |
 | [options] | <code>\*</code> | Override http request option. |
 
+<a name="v1ModelBulkReplaceSourceIdPost"></a>
+
+## v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, [options])
+Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+
+**Kind**: global function  
+**Summary**: Custom Model create  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ModelsPostDto | <code>ModelsPostDto</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelListGet"></a>
+
+## v1ModelListGet([options])
+**Kind**: global function  
+**Summary**: List models data of this source  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
 <a name="v1ModelListSourceIdGet"></a>
 
 ## v1ModelListSourceIdGet(sourceId, [options])
@@ -3370,6 +3646,126 @@ Update many models at once, mainly used to set color and name of the model
 | Param | Type | Description |
 | --- | --- | --- |
 | sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1ModelResetSourceIdModelCountPost"></a>
+
+## v1ModelResetSourceIdModelCountPost(modelCount, sourceId, [options])
+Drop all models and re-create them from data
+
+**Kind**: global function  
+**Summary**: Reset to default timelight models configuration  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modelCount | <code>number</code> |  |
+| sourceId | <code>number</code> |  |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="OnboardingApiFetchParamCreator"></a>
+
+## OnboardingApiFetchParamCreator()
+OnboardingApi - fetch parameter creator
+
+**Kind**: global function  
+<a name="v1OnboardingAnalyzeCsvPost"></a>
+
+## v1OnboardingAnalyzeCsvPost([options])
+**Kind**: global function  
+**Summary**: Analyze a csv input  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1OnboardingValidateCsvPost"></a>
+
+## v1OnboardingValidateCsvPost([options])
+**Kind**: global function  
+**Summary**: Checks that our onboarding csv file is valid  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="OnboardingApiFp"></a>
+
+## OnboardingApiFp()
+OnboardingApi - functional programming interface
+
+**Kind**: global function  
+<a name="v1OnboardingAnalyzeCsvPost"></a>
+
+## v1OnboardingAnalyzeCsvPost([options])
+**Kind**: global function  
+**Summary**: Analyze a csv input  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1OnboardingValidateCsvPost"></a>
+
+## v1OnboardingValidateCsvPost([options])
+**Kind**: global function  
+**Summary**: Checks that our onboarding csv file is valid  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="OnboardingApiFactory"></a>
+
+## OnboardingApiFactory()
+OnboardingApi - factory interface
+
+**Kind**: global function  
+<a name="v1OnboardingAnalyzeCsvPost"></a>
+
+## v1OnboardingAnalyzeCsvPost([options])
+**Kind**: global function  
+**Summary**: Analyze a csv input  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>\*</code> | Override http request option. |
+
+<a name="v1OnboardingValidateCsvPost"></a>
+
+## v1OnboardingValidateCsvPost([options])
+**Kind**: global function  
+**Summary**: Checks that our onboarding csv file is valid  
+**Throws**:
+
+- [<code>RequiredError</code>](#RequiredError) 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
 | [options] | <code>\*</code> | Override http request option. |
 
 <a name="PrevisionApiFetchParamCreator"></a>

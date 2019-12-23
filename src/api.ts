@@ -473,7 +473,7 @@ export interface CreateSourceDayDto {
      */
     date: string;
     /**
-     * An array of 144 values. Each value represents a time window of 10 minutes
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
      * @type {Array<number>}
      * @memberof CreateSourceDayDto
      */
@@ -992,7 +992,7 @@ export interface ImportDayDto {
      */
     date: string;
     /**
-     * An array of 144 values. Each value represents a time window of 10 minutes
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
      * @type {Array<number>}
      * @memberof ImportDayDto
      */
@@ -1170,6 +1170,50 @@ export interface ModelPatchDto {
 /**
  * 
  * @export
+ * @interface ModelPostDto
+ */
+export interface ModelPostDto {
+    /**
+     * The color in hex format. Ex: '#FFFFFF'
+     * @type {string}
+     * @memberof ModelPostDto
+     */
+    color: string;
+    /**
+     * The model name, between 1 and 100 characters
+     * @type {string}
+     * @memberof ModelPostDto
+     */
+    name: string;
+    /**
+     * True if the model is an anomaly and should be ignored by the ML engine
+     * @type {boolean}
+     * @memberof ModelPostDto
+     */
+    anomaly: boolean;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    topTolerance: Array<number>;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    activity: Array<number>;
+    /**
+     * An array of 144, 1440 or 86400 values. Each value represents a time window of 10 minutes, 1 minute or 1 second
+     * @type {Array<number>}
+     * @memberof ModelPostDto
+     */
+    bottomTolerance: Array<number>;
+}
+
+/**
+ * 
+ * @export
  * @interface ModelsPatchDto
  */
 export interface ModelsPatchDto {
@@ -1179,6 +1223,20 @@ export interface ModelsPatchDto {
      * @memberof ModelsPatchDto
      */
     models: Array<ModelPatchDto>;
+}
+
+/**
+ * 
+ * @export
+ * @interface ModelsPostDto
+ */
+export interface ModelsPostDto {
+    /**
+     * The list of models to be created
+     * @type {Array<ModelPostDto>}
+     * @memberof ModelsPostDto
+     */
+    models: Array<ModelPostDto>;
 }
 
 /**
@@ -1478,25 +1536,25 @@ export interface SourceDto {
      * @type {number}
      * @memberof SourceDto
      */
-    groupId: number;
+    groupId?: number;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    groupInertia: number;
+    groupInertia?: number;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    projectionX: number;
+    projectionX?: number;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    projectionY: number;
+    projectionY?: number;
     /**
      * 
      * @type {number}
@@ -1514,37 +1572,43 @@ export interface SourceDto {
      * @type {boolean}
      * @memberof SourceDto
      */
+    hasCustomModels: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SourceDto
+     */
     previsionEnabled: boolean;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    latitude: number;
+    latitude?: number;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    longitude: number;
+    longitude?: number;
     /**
      * 
      * @type {string}
      * @memberof SourceDto
      */
-    address: string;
+    address?: string;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    alertMinCriticity: number;
+    alertMinCriticity?: number;
     /**
      * 
      * @type {number}
      * @memberof SourceDto
      */
-    alertMaxCriticity: number;
+    alertMaxCriticity?: number;
 }
 
 /**
@@ -1771,7 +1835,7 @@ export const AIApiFetchParamCreator = function (configuration?: Configuration) {
         },
         /**
          * Erases and re-computes all day models for a source and year
-         * @summary Recomputes all day modesl
+         * @summary Recomputes all day models
          * @param {number} year 
          * @param {number} sourceId 
          * @param {*} [options] Override http request option.
@@ -1970,7 +2034,7 @@ export const AIApiFp = function(configuration?: Configuration) {
         },
         /**
          * Erases and re-computes all day models for a source and year
-         * @summary Recomputes all day modesl
+         * @summary Recomputes all day models
          * @param {number} year 
          * @param {number} sourceId 
          * @param {*} [options] Override http request option.
@@ -2069,7 +2133,7 @@ export const AIApiFactory = function (configuration?: Configuration, fetch?: Fet
         },
         /**
          * Erases and re-computes all day models for a source and year
-         * @summary Recomputes all day modesl
+         * @summary Recomputes all day models
          * @param {number} year 
          * @param {number} sourceId 
          * @param {*} [options] Override http request option.
@@ -2135,7 +2199,7 @@ export class AIApi extends BaseAPI {
 
     /**
      * Erases and re-computes all day models for a source and year
-     * @summary Recomputes all day modesl
+     * @summary Recomputes all day models
      * @param {number} year 
      * @param {number} sourceId 
      * @param {*} [options] Override http request option.
@@ -4765,6 +4829,83 @@ export const ModelApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+         * @summary Custom Model create
+         * @param {ModelsPostDto} ModelsPostDto 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options: any = {}): FetchArgs {
+            // verify required parameter 'ModelsPostDto' is not null or undefined
+            if (ModelsPostDto === null || ModelsPostDto === undefined) {
+                throw new RequiredError('ModelsPostDto','Required parameter ModelsPostDto was null or undefined when calling v1ModelBulkReplaceSourceIdPost.');
+            }
+            // verify required parameter 'sourceId' is not null or undefined
+            if (sourceId === null || sourceId === undefined) {
+                throw new RequiredError('sourceId','Required parameter sourceId was null or undefined when calling v1ModelBulkReplaceSourceIdPost.');
+            }
+            const localVarPath = `/v1/model/bulk-replace/{sourceId}`
+                .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("Authorization")
+					: configuration.apiKey;
+                localVarHeaderParameter["Authorization"] = localVarApiKeyValue;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"ModelsPostDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(ModelsPostDto || {}) : (ModelsPostDto || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary List models data of this source
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelListGet(options: any = {}): FetchArgs {
+            const localVarPath = `/v1/model/list`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("Authorization")
+					: configuration.apiKey;
+                localVarHeaderParameter["Authorization"] = localVarApiKeyValue;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary List models data of this source
          * @param {number} sourceId 
@@ -4780,6 +4921,49 @@ export const ModelApiFetchParamCreator = function (configuration?: Configuration
                 .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("Authorization")
+					: configuration.apiKey;
+                localVarHeaderParameter["Authorization"] = localVarApiKeyValue;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Drop all models and re-create them from data
+         * @summary Reset to default timelight models configuration
+         * @param {number} modelCount 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options: any = {}): FetchArgs {
+            // verify required parameter 'modelCount' is not null or undefined
+            if (modelCount === null || modelCount === undefined) {
+                throw new RequiredError('modelCount','Required parameter modelCount was null or undefined when calling v1ModelResetSourceIdModelCountPost.');
+            }
+            // verify required parameter 'sourceId' is not null or undefined
+            if (sourceId === null || sourceId === undefined) {
+                throw new RequiredError('sourceId','Required parameter sourceId was null or undefined when calling v1ModelResetSourceIdModelCountPost.');
+            }
+            const localVarPath = `/v1/model/reset/{sourceId}/{modelCount}`
+                .replace(`{${"modelCount"}}`, encodeURIComponent(String(modelCount)))
+                .replace(`{${"sourceId"}}`, encodeURIComponent(String(sourceId)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -4830,6 +5014,44 @@ export const ModelApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+         * @summary Custom Model create
+         * @param {ModelsPostDto} ModelsPostDto 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto> {
+            const localVarFetchArgs = ModelApiFetchParamCreator(configuration).v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary List models data of this source
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelListGet(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto> {
+            const localVarFetchArgs = ModelApiFetchParamCreator(configuration).v1ModelListGet(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * 
          * @summary List models data of this source
          * @param {number} sourceId 
@@ -4838,6 +5060,26 @@ export const ModelApiFp = function(configuration?: Configuration) {
          */
         v1ModelListSourceIdGet(sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto> {
             const localVarFetchArgs = ModelApiFetchParamCreator(configuration).v1ModelListSourceIdGet(sourceId, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Drop all models and re-create them from data
+         * @summary Reset to default timelight models configuration
+         * @param {number} modelCount 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ModelListDto> {
+            const localVarFetchArgs = ModelApiFetchParamCreator(configuration).v1ModelResetSourceIdModelCountPost(modelCount, sourceId, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -4868,6 +5110,26 @@ export const ModelApiFactory = function (configuration?: Configuration, fetch?: 
             return ModelApiFp(configuration).v1ModelBulkPatch(ModelsPatchDto, options)(fetch, basePath);
         },
         /**
+         * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+         * @summary Custom Model create
+         * @param {ModelsPostDto} ModelsPostDto 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any) {
+            return ModelApiFp(configuration).v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @summary List models data of this source
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelListGet(options?: any) {
+            return ModelApiFp(configuration).v1ModelListGet(options)(fetch, basePath);
+        },
+        /**
          * 
          * @summary List models data of this source
          * @param {number} sourceId 
@@ -4876,6 +5138,17 @@ export const ModelApiFactory = function (configuration?: Configuration, fetch?: 
          */
         v1ModelListSourceIdGet(sourceId: number, options?: any) {
             return ModelApiFp(configuration).v1ModelListSourceIdGet(sourceId, options)(fetch, basePath);
+        },
+        /**
+         * Drop all models and re-create them from data
+         * @summary Reset to default timelight models configuration
+         * @param {number} modelCount 
+         * @param {number} sourceId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any) {
+            return ModelApiFp(configuration).v1ModelResetSourceIdModelCountPost(modelCount, sourceId, options)(fetch, basePath);
         },
     };
 };
@@ -4900,6 +5173,30 @@ export class ModelApi extends BaseAPI {
     }
 
     /**
+     * Create many custom models at once, this config replaces the original models.        WARNING: This action will remove all previsions and alerts.
+     * @summary Custom Model create
+     * @param {ModelsPostDto} ModelsPostDto 
+     * @param {number} sourceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    public v1ModelBulkReplaceSourceIdPost(ModelsPostDto: ModelsPostDto, sourceId: number, options?: any) {
+        return ModelApiFp(this.configuration).v1ModelBulkReplaceSourceIdPost(ModelsPostDto, sourceId, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @summary List models data of this source
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    public v1ModelListGet(options?: any) {
+        return ModelApiFp(this.configuration).v1ModelListGet(options)(this.fetch, this.basePath);
+    }
+
+    /**
      * 
      * @summary List models data of this source
      * @param {number} sourceId 
@@ -4909,6 +5206,177 @@ export class ModelApi extends BaseAPI {
      */
     public v1ModelListSourceIdGet(sourceId: number, options?: any) {
         return ModelApiFp(this.configuration).v1ModelListSourceIdGet(sourceId, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Drop all models and re-create them from data
+     * @summary Reset to default timelight models configuration
+     * @param {number} modelCount 
+     * @param {number} sourceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelApi
+     */
+    public v1ModelResetSourceIdModelCountPost(modelCount: number, sourceId: number, options?: any) {
+        return ModelApiFp(this.configuration).v1ModelResetSourceIdModelCountPost(modelCount, sourceId, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * OnboardingApi - fetch parameter creator
+ * @export
+ */
+export const OnboardingApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Analyze a csv input
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingAnalyzeCsvPost(options: any = {}): FetchArgs {
+            const localVarPath = `/v1/onboarding/analyze-csv`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Checks that our onboarding csv file is valid
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingValidateCsvPost(options: any = {}): FetchArgs {
+            const localVarPath = `/v1/onboarding/validate-csv`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * OnboardingApi - functional programming interface
+ * @export
+ */
+export const OnboardingApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Analyze a csv input
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingAnalyzeCsvPost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = OnboardingApiFetchParamCreator(configuration).v1OnboardingAnalyzeCsvPost(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @summary Checks that our onboarding csv file is valid
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingValidateCsvPost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = OnboardingApiFetchParamCreator(configuration).v1OnboardingValidateCsvPost(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * OnboardingApi - factory interface
+ * @export
+ */
+export const OnboardingApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @summary Analyze a csv input
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingAnalyzeCsvPost(options?: any) {
+            return OnboardingApiFp(configuration).v1OnboardingAnalyzeCsvPost(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @summary Checks that our onboarding csv file is valid
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1OnboardingValidateCsvPost(options?: any) {
+            return OnboardingApiFp(configuration).v1OnboardingValidateCsvPost(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * OnboardingApi - object-oriented interface
+ * @export
+ * @class OnboardingApi
+ * @extends {BaseAPI}
+ */
+export class OnboardingApi extends BaseAPI {
+    /**
+     * 
+     * @summary Analyze a csv input
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OnboardingApi
+     */
+    public v1OnboardingAnalyzeCsvPost(options?: any) {
+        return OnboardingApiFp(this.configuration).v1OnboardingAnalyzeCsvPost(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @summary Checks that our onboarding csv file is valid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OnboardingApi
+     */
+    public v1OnboardingValidateCsvPost(options?: any) {
+        return OnboardingApiFp(this.configuration).v1OnboardingValidateCsvPost(options)(this.fetch, this.basePath);
     }
 
 }
